@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use MF\Model\Container;
 use MF\Model\Model;
 
 class Usuario extends Model {
@@ -27,12 +28,24 @@ class Usuario extends Model {
         }
 
         if(isset($dados['senha'])) {
-            $this->senha = $dados['senha'];
+            $this->senha = md5($dados['senha']);
         }
 
         if(isset($dados['email'])) {
             $this->email = $dados['email'];
         }
+    }
+
+    public function getAll()
+    {
+
+        $query = "select id, nome, email from usuario where nome like :nome";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':nome', '%'. $this->__get('nome') . '%');
+        $stmt->execute();
+        print_r($this->__get('nome'));
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public function getUsuarioByEmail($email = null)
@@ -48,6 +61,18 @@ class Usuario extends Model {
         $stmt->execute();
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public static function getUsuarioById($id)
+    {
+
+        $self = Container::getModel('Usuario');
+        $select = "select * from usuario where id = :id";
+        $stmt = $self->db->prepare($select);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
     public function isValid() 

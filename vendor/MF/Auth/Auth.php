@@ -2,6 +2,8 @@
 
 namespace MF\Auth;
 
+use App\Models\Usuario;
+
 class Auth 
 {
     public static function isAutenticated()
@@ -13,5 +15,10 @@ class Auth
         } 
 
         header('Location: /?auth=erro');
+    }
+
+    public static function getUserData()
+    {
+        return Usuario::getUsuarioById($_SESSION['USER_ID']);
     }
 }
