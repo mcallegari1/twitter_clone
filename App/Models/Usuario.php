@@ -43,6 +43,7 @@ class Usuario extends Model {
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(':nome', '%'. $this->__get('nome') . '%');
         $stmt->execute();
+        print_r($this->__get('nome'));
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
