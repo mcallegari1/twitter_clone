@@ -40,6 +40,7 @@ class IndexController extends Action {
 		try {
 
 			if($usuario->isValid()){
+				$dados['senha'] = md5($dados['senha']);
 				$usuario->save($dados);	
 
 				$this->render('cadastro');
