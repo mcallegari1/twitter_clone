@@ -74,7 +74,7 @@
 				</div>
 			</div>
 
-			<?php foreach($this->view->usuarios as $key => $value) { ?>
+			<?php if($this->view->usuarios) foreach($this->view->usuarios as $key => $value) { ?>
 			<div class="row mb-2">
 				<div class="col">
 					<div class="card">
@@ -86,8 +86,11 @@
 							
 								<div class="col-md-6 d-flex justify-content-end">
 									<div>
-										<a href="#" class="btn btn-success">Seguir</a>
-										<a href="#" class="btn btn-danger">Deixar de seguir</a>
+										<?php if(isset($value['seguindo']) && $value['seguindo']) { ?>
+											<a href="/follow?id_user=<?=$value['id']?>" class="btn btn-secondary">Deixar de seguir</a>
+										<?php } else { ?>
+											<a href="/follow?id_user=<?=$value['id']?>" class="btn btn-primary">Seguir</a>
+										<?php } ?>
 									</div>
 								</div>
 							</div>
@@ -95,7 +98,7 @@
 					</div>
 				</div>
 			</div>
-			<? } ?>
+			<? } else echo 'Nenhum usuário encontrado';?>
 
 		</div>
 	</div>

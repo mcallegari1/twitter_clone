@@ -17,6 +17,11 @@ class Auth
         header('Location: /?auth=erro');
     }
 
+    public static function getUserId()
+    {
+        if(isset($_SESSION['USER_ID'])) return $_SESSION['USER_ID'];
+    }
+
     public static function getUserData()
     {
         return Usuario::getUsuarioById($_SESSION['USER_ID']);

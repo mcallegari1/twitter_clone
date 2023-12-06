@@ -39,11 +39,11 @@ class Usuario extends Model {
     public function getAll()
     {
 
-        $query = "select id, nome, email from usuario where nome like :nome";
+        $query = "select id, nome, email from usuario where nome like :nome and id != :id_usuario";
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(':nome', '%'. $this->__get('nome') . '%');
+        $stmt->bindValue(':id_usuario', $this->__get('id'));
         $stmt->execute();
-        print_r($this->__get('nome'));
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }

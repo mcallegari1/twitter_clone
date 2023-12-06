@@ -56,6 +56,18 @@ class Route extends Bootstrap {
 			'action' => 'quemSeguir'
 		);
 
+		$routes['follow'] = array(
+			'route' => '/follow',
+			'controller' => 'appController',
+			'action' => 'follow'
+		);
+
+		$routes['remove'] = array(
+			'route' => '/remove',
+			'controller' => 'appController',
+			'action' => 'remove'
+		);
+
 		$this->setRoutes($routes);
 	}
 

@@ -44,9 +44,25 @@ class AppController extends Action
 
             $oTweet->save($dados);
 
+        } 
+        header('Location: /timeline');
+        
+    }
+
+    public function remove()
+    {
+        Auth::isAutenticated();
+
+        if(isset($_GET['id_tweet']) && $_GET['id_tweet'] != '') {
+            $oTweet = Container::getModel('Tweet');
+            $userData = Auth::getUserData();
+            
+            $oTweet->__set('id_usuario', $userData['id']);
+            $oTweet->__set('id', $_GET['id_tweet']);
+            $oTweet->delete();
+            
             header('Location: /timeline');
         } 
-        
     }
 
     public function quemSeguir()
@@ -61,10 +77,36 @@ class AppController extends Action
             $nomeLike = $_POST['search'];
             $usuario->__set('nome', $nomeLike);
         }
-        $this->view->usuarios = $usuario->getAll();
-        print_r($this->view->usuarios);
+        $usuario->__set('id', Auth::getUserId());
+
+        $users = $usuario->getAll();
+        $data  = array();
+        foreach ($users as $value) {
+            $objFollow = Container::getModel('Seguidores');
+            $objFollow->__set('idUsuario', Auth::getUserId());
+            $objFollow->__set('idSeguidor', $value['id']);
+
+            $value['seguindo'] = $objFollow->wasSeguindo();
+            $data[] = $value;
+        }
+        $this->view->usuarios = $data;
 
         $this->render('quemSeguir');
+    }
+
+    public function follow()
+    {
+        Auth::isAutenticated();
+
+        if(isset($_GET['id_user']) && $_GET['id_user'] != ''){
+            $objFollow = Container::getModel('Seguidores');
+
+            $objFollow->__set('idUsuario', Auth::getUserId());
+            $objFollow->__set('idSeguidor', $_GET['id_user']);
+            $objFollow->toggleSeguidor();
+        }
+
+        header('Location: /quem_seguir');
     }
 
 }

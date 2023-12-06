@@ -22,6 +22,20 @@ class Tweet extends Model
         $this->$attrib = $value;
     }
 
+    public function delete()
+    {
+        $query = "DELETE
+            FROM
+                tweet 
+            WHERE
+                id_usuario = :id_usuario AND id = :id
+        ";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':id', $this->__get('id'));
+        $stmt->bindValue('id_usuario', $this->__get('id_usuario'));
+        $stmt->execute();
+    }
+
     public function getAll()
     {
 
@@ -32,7 +46,7 @@ class Tweet extends Model
             LEFT JOIN 
                 usuario as u ON (t.id_usuario = u.id)
             WHERE 
-                t.id_usuario = :id_usuario
+                t.id_usuario = :id_usuario OR t.id_usuario IN (SELECT id_usuario_seguindo FROM seguidores WHERE id_usuario = :id_usuario)
             ORDER BY 
                 t.data DESC
             ";
