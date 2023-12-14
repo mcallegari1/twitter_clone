@@ -75,6 +75,46 @@ class Usuario extends Model {
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
+    public function getInfoUsuario()
+    {
+        $select = "select nome, email from usuario where id = :id";
+        $stmt = $this->db->prepare($select);
+        $stmt->bindValue(':id', $this->__get('id'));
+        $stmt->execute();
+
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    public function getTotalTweets()
+    {
+        $select = "select count(*) as total_tweet from tweet where id_usuario = :id";
+        $stmt = $this->db->prepare($select);
+        $stmt->bindValue(':id', $this->__get('id'));
+        $stmt->execute();
+
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    public function getTotalSeguindo()
+    {
+        $select = "select count(*) as total_seguindo from seguidores where id_usuario = :id";
+        $stmt = $this->db->prepare($select);
+        $stmt->bindValue(':id', $this->__get('id'));
+        $stmt->execute();
+
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    public function getTotalSeguidores()
+    {
+        $select = "select count(*) as total_seguidores from seguidores where id_usuario_seguindo = :id";
+        $stmt = $this->db->prepare($select);
+        $stmt->bindValue(':id', $this->__get('id'));
+        $stmt->execute();
+
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
     public function isValid() 
     {
         $go = true;

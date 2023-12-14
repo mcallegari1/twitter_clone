@@ -21,7 +21,14 @@ class AppController extends Action
         $oTweet->__set('id_usuario', $_SESSION['USER_ID']);
         $tweets = $oTweet->getAll();
 
-        $this->view->tweets = $tweets;
+        $oUser = Container::getModel('Usuario');
+        $oUser->__set('id', Auth::getUserId());
+
+        $this->view->tweets          = $tweets;
+        $this->view->userData        = $oUser->getInfoUsuario();
+        $this->view->totalTweets     = $oUser->getTotalTweets()['total_tweet'];
+        $this->view->totalSeguindo   = $oUser->getTotalSeguindo()['total_seguindo'];
+        $this->view->totalSeguidores = $oUser->getTotalSeguidores()['total_seguidores'];
 
         $this->render('timeline');
     }
@@ -90,6 +97,13 @@ class AppController extends Action
             $data[] = $value;
         }
         $this->view->usuarios = $data;
+
+        $oUser = Container::getModel('Usuario');
+        $oUser->__set('id', Auth::getUserId());
+        $this->view->userData        = $oUser->getInfoUsuario();
+        $this->view->totalTweets     = $oUser->getTotalTweets()['total_tweet'];
+        $this->view->totalSeguindo   = $oUser->getTotalSeguindo()['total_seguindo'];
+        $this->view->totalSeguidores = $oUser->getTotalSeguidores()['total_seguidores'];
 
         $this->render('quemSeguir');
     }
